@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes on Computing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #15171a;
+    --bg-elevated: #1c1f23;
+    --text: #e7e4dc;
+    --text-muted: #9a9ea3;
+    --accent: #5fb3a3;
+    --accent-warm: #c9a66b;
+    --rule: #2a2d31;
+    --max-width: 680px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  h1, h2, h3, nav, .meta, .tag, .archive, footer {
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+  }
+
+  .wrap {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Header */
+  header.site-header {
+    border-bottom: 1px solid var(--rule);
+    padding: 56px 0 28px;
+  }
+
+  .site-title {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+  }
+
+  .site-title a { color: var(--text); }
+  .site-title a:hover { text-decoration: none; color: var(--accent); }
+
+  .tagline {
+    color: var(--text-muted);
+    font-size: 15px;
+    margin: 0 0 24px;
+  }
+
+  nav.site-nav {
+    display: flex;
+    gap: 28px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  nav.site-nav a {
+    color: var(--text-muted);
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+  }
+
+  nav.site-nav a.active,
+  nav.site-nav a:hover {
+    color: var(--text);
+    border-bottom-color: var(--accent);
+    text-decoration: none;
+  }
+
+  main { padding: 48px 0 80px; }
+
+  section { margin-bottom: 64px; }
+
+  section > h2 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin: 0 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  section > h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* Archive block — terminal directory listing */
+  .archive {
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 18px 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    margin-bottom: 48px;
+  }
+
+  .archive summary {
+    cursor: pointer;
+    color: var(--accent);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .archive summary::-webkit-details-marker { display: none; }
+  .archive summary::before { content: "▸"; transition: transform 0.15s ease; }
+  .archive[open] summary::before { transform: rotate(90deg); }
+
+  .archive-body { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--rule); }
+
+  .archive-year { color: var(--text-muted); margin: 12px 0 4px; }
+  .archive-year:first-child { margin-top: 0; }
+
+  .archive ul { list-style: none; margin: 0 0 0 16px; padding: 0; }
+  .archive li { padding: 3px 0; color: var(--text); }
+  .archive li a { color: var(--text); }
+  .archive li a:hover { color: var(--accent); }
+  .archive .count { color: var(--text-muted); }
+
+  /* Post list */
+  .post {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .post:first-of-type { padding-top: 0; }
+  .post:last-of-type { border-bottom: none; }
+
+  .post .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .post h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    font-family: 'Source Serif 4', serif;
+  }
+
+  .post h3 a { color: var(--text); }
+  .post h3 a:hover { color: var(--accent); text-decoration: none; }
+
+  .post p { margin: 0 0 12px; color: var(--text); }
+
+  .read-more { font-size: 14px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; }
+
+  /* Projects grid */
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 560px) {
+    .project-grid { grid-template-columns: 1fr; }
+  }
+
+  .project-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--text);
+  }
+
+  .project-card p {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin: 0 0 16px;
+    flex-grow: 1;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-warm);
+    border: 1px solid var(--accent-warm);
+    border-radius: 3px;
+    padding: 2px 7px;
+  }
+
+  .project-links { font-size: 13px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; }
+  .project-links a { margin-right: 14px; }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 28px 0 56px;
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer a { color: var(--text-muted); }
+  footer a:hover { color: var(--accent); }
+
+  @media (max-width: 480px) {
+    body { font-size: 16.5px; }
+    header.site-header { padding: 40px 0 24px; }
+    .site-title { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <p class="site-title"><a href="/">Notes on Computing</a></p>
+    <p class="tagline">A running log of what I'm learning, plus the projects it turns into.</p>
+    <nav class="site-nav">
+      <a href="#notes" class="active">Notes</a>
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="notes">
+    <h2>Notes</h2>
+
+    <details class="archive" open>
+      <summary>archive/ <span class="count">— 6 entries</span></summary>
+      <div class="archive-body">
+        <p class="archive-year">2026</p>
+        <ul>
+          <li><a href="#">jul — building a local RAG pipeline</a></li>
+          <li><a href="#">jun — notes on transformer attention</a></li>
+          <li><a href="#">may — first pass at a CLI tool</a></li>
+        </ul>
+        <p class="archive-year">2025</p>
+        <ul>
+          <li><a href="#">nov — setting up this site</a></li>
+          <li><a href="#">oct — why I'm learning to write things down</a></li>
+          <li><a href="#">sep — hello, world</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <article class="post">
+      <p class="meta">2026-07-12</p>
+      <h3><a href="#">Building a local RAG pipeline</a></h3>
+      <p>Replace this with your real post excerpt — two or three sentences summarizing what the note covers, written the way you'd explain it to a colleague.</p>
+      <p class="read-more"><a href="#">Read more →</a></p>
+    </article>
+
+    <article class="post">
+      <p class="meta">2026-06-03</p>
+      <h3><a href="#">Notes on transformer attention</a></h3>
+      <p>Sample excerpt text. Swap this out with a short summary of the actual note — what you were confused about, what clicked, what you'd tell past-you.</p>
+      <p class="read-more"><a href="#">Read more →</a></p>
+    </article>
+
+    <article class="post">
+      <p class="meta">2026-05-19</p>
+      <h3><a href="#">First pass at a CLI tool</a></h3>
+      <p>Placeholder text. Each post block is identical — copy this &lt;article class="post"&gt; structure for every new note you publish.</p>
+      <p class="read-more"><a href="#">Read more →</a></p>
+    </article>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="project-grid">
+
+      <div class="project-card">
+        <h3>Project name one</h3>
+        <p>One or two sentences on what it does and the problem it solves. Keep it concrete — employers skim this.</p>
+        <div class="tags">
+          <span class="tag">python</span>
+          <span class="tag">api</span>
+        </div>
+        <div class="project-links">
+          <a href="#">Code →</a><a href="#">Live demo →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <h3>Project name two</h3>
+        <p>Same format — short description, tech stack tags, and links to the repo or a live version.</p>
+        <div class="tags">
+          <span class="tag">javascript</span>
+          <span class="tag">react</span>
+        </div>
+        <div class="project-links">
+          <a href="#">Code →</a><a href="#">Live demo →</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <h3>Project name three</h3>
+        <p>A third slot — duplicate the &lt;div class="project-card"&gt; block for as many projects as you want to show.</p>
+        <div class="tags">
+          <span class="tag">sql</span>
+          <span class="tag">data</span>
+        </div>
+        <div class="project-links">
+          <a href="#">Code →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About</h2>
+    <p>Mostly tech notes and projects — with the occasional side trip into real estate, consumer awareness, and other things I've been thinking about.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
+    <span>© 2026 Notes on Computing</span>
+    <span><a href="mailto:you@example.com">you@example.com</a> · <a href="#">GitHub</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
