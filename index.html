@@ -18,7 +18,6 @@
     --muted:#8f9499;
     --accent:#67b7a8;
     --rule:#2b2d31;
-    --width:720px;
 }
 
 *{
@@ -34,11 +33,20 @@ body{
     line-height:1.7;
 }
 
+
+/* MAIN PAGE LAYOUT */
+
 .wrapper{
-    max-width:var(--width);
+    max-width:1050px;
     margin:auto;
     padding:60px 25px;
+    display:grid;
+    grid-template-columns:720px 220px;
+    gap:50px;
 }
+
+
+/* HEADER */
 
 h1{
     margin:0;
@@ -51,6 +59,9 @@ h1{
     margin-top:8px;
     margin-bottom:60px;
 }
+
+
+/* POSTS */
 
 .posts{
     margin-top:10px;
@@ -80,11 +91,72 @@ h1{
     color:var(--accent);
 }
 
+
+/* ARCHIVE */
+
+.archive{
+    border-left:1px solid var(--rule);
+    padding-left:25px;
+    margin-top:160px;
+}
+
+.archive h2{
+    margin:0 0 20px 0;
+    color:var(--muted);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:14px;
+    font-weight:500;
+    text-transform:uppercase;
+}
+
+.archive ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.archive li{
+    margin-bottom:12px;
+}
+
+.archive a{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:16px;
+}
+
+.archive a:hover{
+    color:var(--accent);
+}
+
+
+/* FOOTER */
+
 footer{
     margin-top:70px;
     color:var(--muted);
     font-size:15px;
 }
+
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.wrapper{
+    grid-template-columns:1fr;
+}
+
+.archive{
+    margin-top:30px;
+    border-left:none;
+    border-top:1px solid var(--rule);
+    padding-left:0;
+    padding-top:30px;
+}
+
+}
+
 
 @media(max-width:600px){
 
@@ -103,9 +175,15 @@ footer{
 
 </head>
 
+
 <body>
 
+
 <div class="wrapper">
+
+
+<main>
+
 
 <h1>Notes</h1>
 
@@ -113,67 +191,98 @@ footer{
 Thoughts on AI, software, real estate, and whatever else I'm learning.
 </p>
 
+
 <div class="posts">
+
 
 <div class="post">
 <div class="date">2026-07-15</div>
 <div class="title"><a href="posts/post1.html">Why I Started Writing Everything Down</a></div>
 </div>
 
+
 <div class="post">
 <div class="date">2026-07-12</div>
 <div class="title"><a href="posts/post2.html">Building a Local AI Assistant</a></div>
 </div>
+
 
 <div class="post">
 <div class="date">2026-07-09</div>
 <div class="title"><a href="posts/post3.html">My First Experience with Ollama</a></div>
 </div>
 
+
 <div class="post">
 <div class="date">2026-07-04</div>
 <div class="title"><a href="posts/post4.html">Understanding Embeddings</a></div>
 </div>
+
 
 <div class="post">
 <div class="date">2026-06-28</div>
 <div class="title"><a href="posts/post5.html">Using Python for Small Daily Tasks</a></div>
 </div>
 
+
 <div class="post">
 <div class="date">2026-06-20</div>
 <div class="title"><a href="posts/post6.html">Things I Learned About Prompting</a></div>
 </div>
+
 
 <div class="post">
 <div class="date">2026-06-11</div>
 <div class="title"><a href="posts/post7.html">Organizing Notes That I Can Actually Find</a></div>
 </div>
 
+
 <div class="post">
 <div class="date">2026-06-03</div>
 <div class="title"><a href="posts/post8.html">Learning SQL One Query at a Time</a></div>
 </div>
+
 
 <div class="post">
 <div class="date">2026-05-26</div>
 <div class="title"><a href="posts/post9.html">Building Better Habits as a Programmer</a></div>
 </div>
 
+
 <div class="post">
 <div class="date">2026-05-18</div>
 <div class="title"><a href="posts/post10.html">Hello, World.</a></div>
 </div>
 
+
 </div>
+
 
 <footer>
-
 © 2026 • Notes
-
 </footer>
 
+
+</main>
+
+
+
+<aside class="archive">
+
+<h2>Archive</h2>
+
+<ul>
+<li><a href="#">July 2026</a></li>
+<li><a href="#">June 2026</a></li>
+<li><a href="#">May 2026</a></li>
+</ul>
+
+</aside>
+
+
+
 </div>
+
 
 </body>
 </html>
