@@ -34,7 +34,7 @@ body{
 }
 
 
-/* TOP BAR — search icon left, hamburger right */
+/* TOP BAR — hamburger left, inline search on right */
 
 .topbar{
     max-width:1050px;
@@ -42,7 +42,7 @@ body{
     padding:25px 25px 0 25px;
     display:flex;
     align-items:center;
-    justify-content:space-between;
+    gap:16px;
 }
 
 .icon-btn{
@@ -54,6 +54,7 @@ body{
     display:flex;
     align-items:center;
     justify-content:center;
+    flex:0 0 auto;
     transition:color .15s ease;
 }
 
@@ -73,51 +74,82 @@ body{
 }
 
 
-/* SEARCH BAR — expands under topbar when toggled */
+/* INLINE SEARCH — icon, input, and SEARCH label all in one row */
 
-.search-wrap{
-    max-width:1050px;
-    margin:auto;
-    padding:0 25px;
-    max-height:0;
-    overflow:hidden;
-    transition:max-height .25s ease, padding .25s ease;
+.search-inline{
+    display:flex;
+    align-items:center;
+    flex:1;
+    justify-content:flex-end;
+    gap:12px;
+    border-bottom:1px solid transparent;
+    padding-bottom:8px;
+    transition:border-color .2s ease;
 }
 
-.search-wrap.open{
-    max-height:80px;
-    padding:14px 25px 0 25px;
+.search-inline.open{
+    border-color:var(--rule);
 }
 
-.search-inner{
-    max-width:720px;
+.search-inline .icon-btn{
+    padding:8px 0;
 }
 
-.search-inner input{
-    width:100%;
-    background:#1c1f23;
-    border:1px solid var(--rule);
+.search-inline input{
+    flex:0 0 0;
+    width:0;
+    min-width:0;
+    opacity:0;
+    background:transparent;
+    border:none;
+    outline:none;
     color:var(--text);
     font-family:'IBM Plex Mono',monospace;
     font-size:15px;
-    padding:10px 14px;
-    border-radius:4px;
-    outline:none;
+    padding:8px 0;
+    transition:flex .25s ease, opacity .2s ease;
 }
 
-.search-inner input::placeholder{
+.search-inline.open input{
+    flex:1 1 auto;
+    width:auto;
+    opacity:1;
+}
+
+.search-inline input::placeholder{
     color:var(--muted);
 }
 
-.search-inner input:focus{
-    border-color:var(--accent);
+.search-submit{
+    background:none;
+    border:none;
+    color:var(--muted);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    cursor:pointer;
+    white-space:nowrap;
+    display:none;
+    padding:8px 0;
+    flex:0 0 auto;
+}
+
+.search-inline.open .search-submit{
+    display:inline-block;
+}
+
+.search-submit:hover{
+    color:var(--accent);
 }
 
 .no-results{
+    max-width:1050px;
+    margin:auto;
     color:var(--muted);
     font-family:'IBM Plex Mono',monospace;
     font-size:14px;
-    padding:14px 0;
+    padding:14px 25px 0 25px;
     display:none;
 }
 
@@ -410,16 +442,17 @@ footer{
     <button class="icon-btn" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
         <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
     </button>
-    <button class="icon-btn" id="searchToggle" aria-label="Toggle search" aria-expanded="false">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-    </button>
-</div>
 
-<div class="search-wrap" id="searchWrap">
-    <div class="search-inner">
-        <input type="text" id="searchInput" placeholder="Search posts or labels…" autocomplete="off">
+    <div class="search-inline" id="searchInline">
+        <button class="icon-btn" id="searchToggle" aria-label="Toggle search" aria-expanded="false">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+        <input type="text" id="searchInput" placeholder="Search this blog" autocomplete="off">
+        <button class="search-submit" id="searchSubmit">Search</button>
     </div>
 </div>
+
+<p class="no-results" id="noResults">No posts match your search.</p>
 
 
 <div class="wrapper">
@@ -491,8 +524,6 @@ Thoughts on AI, software, real estate, and whatever else comes to mind.
 
 </div>
 
-<p class="no-results" id="noResults">No posts match your search.</p>
-
 <footer>
 © 2026 • Notes
 </footer>
@@ -544,9 +575,10 @@ Thoughts on AI, software, real estate, and whatever else comes to mind.
 
 <script>
 
+const searchInline = document.getElementById('searchInline');
 const searchToggle = document.getElementById('searchToggle');
-const searchWrap = document.getElementById('searchWrap');
 const searchInput = document.getElementById('searchInput');
+const searchSubmit = document.getElementById('searchSubmit');
 
 const menuToggle = document.getElementById('menuToggle');
 const sideMenu = document.getElementById('sideMenu');
@@ -558,16 +590,22 @@ const labelPillsContainer = document.getElementById('labelPills');
 
 let activeLabel = null;
 
-// --- Search toggle ---
+// --- Search toggle (inline expand) ---
 searchToggle.addEventListener('click', () => {
-    const isOpen = searchWrap.classList.toggle('open');
+    const isOpen = searchInline.classList.toggle('open');
     searchToggle.setAttribute('aria-expanded', isOpen);
     if (isOpen) {
-        setTimeout(() => searchInput.focus(), 150);
+        setTimeout(() => searchInput.focus(), 200);
     } else {
         searchInput.value = '';
         filterPosts();
     }
+});
+
+// --- Search submit (Blogger-style "SEARCH" label) ---
+searchSubmit.addEventListener('click', () => {
+    filterPosts();
+    searchInput.focus();
 });
 
 // --- Menu toggle ---
@@ -622,7 +660,7 @@ sortedLabels.forEach((label, i) => {
             pill.classList.add('active');
         }
         closeMenu();
-        searchWrap.classList.add('open');
+        searchInline.classList.add('open');
         searchToggle.setAttribute('aria-expanded', true);
         filterPosts();
     });
