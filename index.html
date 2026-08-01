@@ -18,7 +18,7 @@
     --muted:#8f9499;
     --accent:#67b7a8;
     --rule:#2b2d31;
-    --menu-width:200px;
+    --sidebar-width:240px;
 }
 
 *{
@@ -35,127 +35,91 @@ body{
     overflow-x:hidden;
 }
 
-#pageContent{
-    margin-left:var(--menu-width);
+.page-layout{
+    max-width:1000px;
+    margin:0 auto;
+    display:flex;
+    align-items:flex-start;
+    gap:50px;
+    padding:0 25px;
+}
+
+.main-col{
+    flex:1;
+    min-width:0;
 }
 
 
 /* TOP BAR — hamburger left, inline search on right */
 
-.topbar{
-    max-width:1050px;
-    margin:auto;
-    padding:25px 25px 0 25px;
+/* SEARCH WIDGET — lives in the sidebar now, always visible */
+
+.search-widget{
+    margin-bottom:25px;
+    padding-bottom:20px;
+    border-bottom:1px solid var(--rule);
+}
+
+.search-label{
+    color:var(--text);
+    font-family:'Source Serif 4',serif;
+    font-size:17px;
+    font-weight:600;
+    margin:0 0 12px 0;
+}
+
+.search-row{
     display:flex;
-    align-items:center;
-    gap:16px;
+    gap:8px;
 }
 
-.icon-btn{
-    background:none;
-    border:none;
-    color:var(--muted);
-    cursor:pointer;
-    padding:8px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex:0 0 auto;
-    transition:color .15s ease;
-}
-
-.icon-btn:hover,
-.icon-btn:focus-visible{
-    color:var(--accent);
-}
-
-.icon-btn svg{
-    width:22px;
-    height:22px;
-    stroke:currentColor;
-    fill:none;
-    stroke-width:1.8;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-}
-
-
-/* INLINE SEARCH — icon, input, and SEARCH label all in one row */
-
-.search-inline{
-    display:flex;
-    align-items:center;
+.search-row input{
     flex:1;
-    justify-content:flex-end;
-    gap:12px;
-    border-bottom:1px solid transparent;
-    padding-bottom:8px;
-    transition:border-color .2s ease;
-}
-
-.search-inline.open{
-    border-color:var(--rule);
-}
-
-.search-inline .icon-btn{
-    padding:8px 0;
-}
-
-.search-inline input{
-    flex:0 0 0;
-    width:0;
     min-width:0;
-    opacity:0;
-    background:transparent;
-    border:none;
+    background:#22252a;
+    border:1px solid var(--rule);
     outline:none;
     color:var(--text);
     font-family:'IBM Plex Mono',monospace;
-    font-size:15px;
-    padding:8px 0;
-    transition:flex .25s ease, opacity .2s ease;
+    font-size:14px;
+    padding:8px 10px;
+    border-radius:4px;
 }
 
-.search-inline.open input{
-    flex:1 1 auto;
-    width:auto;
-    opacity:1;
+.search-row input:focus{
+    border-color:var(--accent);
 }
 
-.search-inline input::placeholder{
+.search-row input::placeholder{
     color:var(--muted);
 }
 
 .search-submit{
     background:none;
-    border:none;
+    border:1px solid var(--rule);
     color:var(--muted);
     font-family:'IBM Plex Mono',monospace;
     font-size:12px;
-    letter-spacing:.08em;
+    letter-spacing:.04em;
     text-transform:uppercase;
     cursor:pointer;
     white-space:nowrap;
-    display:none;
-    padding:8px 0;
+    padding:8px 12px;
+    border-radius:4px;
     flex:0 0 auto;
-}
-
-.search-inline.open .search-submit{
-    display:inline-block;
+    transition:color .15s ease, border-color .15s ease;
 }
 
 .search-submit:hover{
     color:var(--accent);
+    border-color:var(--accent);
 }
 
 .no-results{
-    max-width:1050px;
-    margin:auto;
     color:var(--muted);
     font-family:'IBM Plex Mono',monospace;
     font-size:14px;
-    padding:14px 25px 0 25px;
+    padding:10px 0 0 0;
     display:none;
 }
 
@@ -164,74 +128,72 @@ body{
 }
 
 
-/* SIDE MENU — hamburger panel */
+/* SIDEBAR — fixed, always visible, only the posts column scrolls */
 
-.menu-overlay{
-    position:fixed;
-    inset:0;
-    background:transparent;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .2s ease;
-    z-index:20;
-}
+/* SIDEBAR — a natural column that sticks in view while you scroll,
+   no separate panel background, just a thin divider like the rest of the page */
 
-.menu-overlay.open{
-    opacity:1;
-    pointer-events:auto;
-}
-
-.side-menu{
-    position:fixed;
-    top:0;
-    left:0;
-    height:100%;
-    width:var(--menu-width);
-    max-width:80vw;
-    background:#1a1c20;
-    border-right:1px solid var(--rule);
-    transform:translateX(-100%);
-    transition:transform .25s ease;
-    z-index:21;
-    padding:25px;
-    overflow-y:auto;
-}
-
-.side-menu.open{
-    transform:translateX(0);
-}
-
-.menu-back{
-    display:flex;
-    align-items:center;
-    margin-bottom:30px;
-    cursor:pointer;
+.sidebar{
+    position:sticky;
+    top:30px;
+    align-self:flex-start;
+    flex:0 0 var(--sidebar-width);
+    width:var(--sidebar-width);
     background:none;
-    border:none;
-    padding:8px 0;
+    border-left:1px solid var(--rule);
+    padding-left:30px;
 }
 
-.menu-back svg{
-    width:20px;
-    height:20px;
-    stroke:var(--muted);
-    fill:none;
-    stroke-width:1.8;
-    stroke-linecap:round;
-    stroke-linejoin:round;
+.home-link{
+    display:block;
+    color:var(--text);
+    text-decoration:none;
+    font-family:'Source Serif 4',serif;
+    font-size:17px;
+    font-weight:600;
+    margin-bottom:25px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--rule);
 }
 
-.menu-back:hover svg{
-    stroke:var(--accent);
+.home-link:hover{
+    color:var(--accent);
 }
 
-.menu-section{
+.sidebar-columns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
     border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
     padding:18px 0;
 }
 
-.menu-section:last-child{
-    border-bottom:1px solid var(--rule);
+.sidebar-columns .menu-section{
+    border-top:none;
+    padding:0;
+}
+
+.sidebar-columns .menu-section-header{
+    font-size:14px;
+}
+
+.sidebar-columns .menu-section-header svg{
+    width:12px;
+    height:12px;
+}
+
+.sidebar-columns .label-pill{
+    font-size:13px;
+    white-space:normal;
+}
+
+.sidebar-columns li{
+    margin-bottom:8px;
+}
+
+.sidebar-columns li a{
+    font-size:13px;
 }
 
 .menu-section-header{
@@ -279,23 +241,23 @@ body{
     padding-top:16px;
 }
 
-.side-menu ul{
+.sidebar ul{
     list-style:none;
     padding:0;
     margin:0;
 }
 
-.side-menu li{
+.sidebar li{
     margin-bottom:12px;
 }
 
-.side-menu a{
+.sidebar a{
     color:var(--muted);
     text-decoration:none;
     font-size:16px;
 }
 
-.side-menu a:hover{
+.sidebar a:hover{
     color:var(--accent);
 }
 
@@ -361,9 +323,7 @@ body{
 /* MAIN PAGE LAYOUT */
 
 .wrapper{
-    max-width:1050px;
-    margin:auto;
-    padding:30px 25px 60px 25px;
+    padding:40px 0 60px 0;
 }
 
 
@@ -441,6 +401,22 @@ footer{
     font-size:16px;
 }
 
+.page-layout{
+    flex-direction:column;
+    gap:0;
+}
+
+.sidebar{
+    position:static;
+    width:100%;
+    flex:none;
+    border-left:none;
+    border-top:1px solid var(--rule);
+    padding-left:0;
+    padding-top:25px;
+    margin-top:20px;
+}
+
 }
 
 </style>
@@ -451,24 +427,9 @@ footer{
 <body>
 
 
-<div id="pageContent">
+<div class="page-layout">
 
-<div class="topbar">
-    <button class="icon-btn" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
-        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-    </button>
-
-    <div class="search-inline" id="searchInline">
-        <button class="icon-btn" id="searchToggle" aria-label="Toggle search" aria-expanded="false">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
-        <input type="text" id="searchInput" placeholder="Search this blog" autocomplete="off">
-        <button class="search-submit" id="searchSubmit">Search</button>
-    </div>
-</div>
-
-<p class="no-results" id="noResults">No posts match your search.</p>
-
+<div class="main-col">
 
 <div class="wrapper">
 
@@ -479,6 +440,8 @@ footer{
 <p class="tagline">
 Thoughts on AI, software, real estate, and whatever else comes to mind.
 </p>
+
+<p class="no-results" id="noResults">No posts match your search.</p>
 
 <div class="posts" id="postsList">
 
@@ -550,57 +513,60 @@ Thoughts on AI, software, real estate, and whatever else comes to mind.
 </div>
 
 
-<div class="menu-overlay" id="menuOverlay"></div>
+<nav class="sidebar" id="sidebar">
 
-<nav class="side-menu" id="sideMenu">
-
-    <button class="menu-back" id="menuBack" aria-label="Close menu">
-        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-    </button>
-
-    <div class="menu-section" id="archiveSection">
-        <button class="menu-section-header">
-            Archive
-            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </button>
-        <div class="menu-section-body">
-            <div class="menu-section-body-inner">
-                <ul>
-                    <li><a href="#">July 2026</a></li>
-                    <li><a href="#">June 2026</a></li>
-                    <li><a href="#">May 2026</a></li>
-                </ul>
-            </div>
+    <div class="search-widget">
+        <p class="search-label">Search This Blog</p>
+        <div class="search-row">
+            <input type="text" id="searchInput" placeholder="" autocomplete="off">
+            <button class="search-submit" id="searchSubmit">Search</button>
         </div>
     </div>
 
-    <div class="menu-section open" id="labelsSection">
-        <button class="menu-section-header">
-            Labels
-            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </button>
-        <div class="menu-section-body">
-            <div class="menu-section-body-inner">
-                <div id="labelPills"></div>
-                <button class="show-more-btn" id="showMoreLabels">Show more</button>
+    <a href="index.html" class="home-link">Home</a>
+
+    <div class="sidebar-columns">
+
+        <div class="menu-section open" id="labelsSection">
+            <button class="menu-section-header">
+                Labels
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="menu-section-body">
+                <div class="menu-section-body-inner">
+                    <div id="labelPills"></div>
+                    <button class="show-more-btn" id="showMoreLabels">Show more</button>
+                </div>
             </div>
         </div>
+
+        <div class="menu-section open" id="archiveSection">
+            <button class="menu-section-header">
+                Archive
+                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="menu-section-body">
+                <div class="menu-section-body-inner">
+                    <ul>
+                        <li><a href="#">July 2026</a></li>
+                        <li><a href="#">June 2026</a></li>
+                        <li><a href="#">May 2026</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </nav>
 
+</div>
+
 
 <script>
 
-const searchInline = document.getElementById('searchInline');
-const searchToggle = document.getElementById('searchToggle');
 const searchInput = document.getElementById('searchInput');
 const searchSubmit = document.getElementById('searchSubmit');
-
-const menuToggle = document.getElementById('menuToggle');
-const sideMenu = document.getElementById('sideMenu');
-const menuOverlay = document.getElementById('menuOverlay');
-const pageContent = document.getElementById('pageContent');
 
 const posts = Array.from(document.querySelectorAll('.post'));
 const noResults = document.getElementById('noResults');
@@ -608,42 +574,11 @@ const labelPillsContainer = document.getElementById('labelPills');
 
 let activeLabel = null;
 
-// --- Search toggle (inline expand) ---
-searchToggle.addEventListener('click', () => {
-    const isOpen = searchInline.classList.toggle('open');
-    searchToggle.setAttribute('aria-expanded', isOpen);
-    if (isOpen) {
-        setTimeout(() => searchInput.focus(), 200);
-    } else {
-        searchInput.value = '';
-        filterPosts();
-    }
-});
-
 // --- Search submit (Blogger-style "SEARCH" label) ---
 searchSubmit.addEventListener('click', () => {
     filterPosts();
     searchInput.focus();
 });
-
-// --- Menu toggle ---
-function openMenu(){
-    sideMenu.classList.add('open');
-    menuOverlay.classList.add('open');
-    menuToggle.setAttribute('aria-expanded', true);
-}
-function closeMenu(){
-    sideMenu.classList.remove('open');
-    menuOverlay.classList.remove('open');
-    menuToggle.setAttribute('aria-expanded', false);
-}
-menuToggle.addEventListener('click', () => {
-    sideMenu.classList.contains('open') ? closeMenu() : openMenu();
-});
-menuOverlay.addEventListener('click', closeMenu);
-
-// --- Back arrow closes the menu ---
-document.getElementById('menuBack').addEventListener('click', closeMenu);
 
 // --- Collapsible sections (Archive / Labels) ---
 document.querySelectorAll('.menu-section-header').forEach(header => {
@@ -677,9 +612,6 @@ sortedLabels.forEach((label, i) => {
             activeLabel = label;
             pill.classList.add('active');
         }
-        closeMenu();
-        searchInline.classList.add('open');
-        searchToggle.setAttribute('aria-expanded', true);
         filterPosts();
     });
     labelPillsContainer.appendChild(pill);
@@ -715,6 +647,25 @@ function filterPosts(){
 }
 
 searchInput.addEventListener('input', filterPosts);
+
+// --- Align sidebar top with the first post's date, not the page title ---
+function alignSidebar(){
+    const sidebar = document.getElementById('sidebar');
+    const firstDate = document.querySelector('.post .date');
+    if (!sidebar || !firstDate) return;
+
+    const EXTRA_OFFSET = 30;
+    sidebar.style.marginTop = '0px';
+    const delta = firstDate.getBoundingClientRect().top - sidebar.getBoundingClientRect().top;
+    sidebar.style.marginTop = Math.max(0, delta + EXTRA_OFFSET) + 'px';
+}
+
+if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(alignSidebar);
+} else {
+    window.addEventListener('load', alignSidebar);
+}
+window.addEventListener('resize', alignSidebar);
 
 </script>
 
