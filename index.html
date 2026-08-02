@@ -56,63 +56,51 @@ body{
 
 .search-widget{
     margin-bottom:25px;
-    padding-bottom:20px;
-    border-bottom:1px solid var(--rule);
-}
-
-.search-label{
-    color:var(--text);
-    font-family:'Source Serif 4',serif;
-    font-size:17px;
-    font-weight:600;
-    margin:0 0 12px 0;
 }
 
 .search-row{
     display:flex;
+    align-items:center;
     gap:8px;
+    border-bottom:1px solid var(--rule);
+    padding-bottom:6px;
 }
 
-.search-row input{
+.search-row:focus-within{
+    border-color:var(--accent);
+}
+
+.search-icon{
+    width:16px;
+    height:16px;
+    stroke:var(--muted);
+    fill:none;
+    stroke-width:1.8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    flex:0 0 auto;
+}
+
+.search-inline-input{
+    display:block;
+    width:100%;
     flex:1;
     min-width:0;
-    background:#22252a;
-    border:1px solid var(--rule);
+    background:none;
+    border:none;
     outline:none;
     color:var(--text);
     font-family:'IBM Plex Mono',monospace;
-    font-size:14px;
-    padding:8px 10px;
-    border-radius:4px;
+    font-size:16px;
+    padding:2px 0;
 }
 
-.search-row input:focus{
+.search-inline-input:focus{
     border-color:var(--accent);
 }
 
-.search-row input::placeholder{
+.search-inline-input::placeholder{
     color:var(--muted);
-}
-
-.search-submit{
-    background:none;
-    border:1px solid var(--rule);
-    color:var(--muted);
-    font-family:'IBM Plex Mono',monospace;
-    font-size:12px;
-    letter-spacing:.04em;
-    text-transform:uppercase;
-    cursor:pointer;
-    white-space:nowrap;
-    padding:8px 12px;
-    border-radius:4px;
-    flex:0 0 auto;
-    transition:color .15s ease, border-color .15s ease;
-}
-
-.search-submit:hover{
-    color:var(--accent);
-    border-color:var(--accent);
 }
 
 .no-results{
@@ -260,10 +248,44 @@ body{
     color:var(--accent);
 }
 
-#labelPills{
+#archiveList a.active{
+    color:var(--accent);
+    font-weight:600;
+}
+
+#labelPills,
+#archiveList{
     display:grid;
     grid-template-columns:1fr;
     gap:0;
+    max-height:140px;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding-right:10px;
+    scrollbar-width:thin;
+    scrollbar-color:var(--text) var(--rule);
+}
+
+#labelPills::-webkit-scrollbar,
+#archiveList::-webkit-scrollbar{
+    width:20px;
+}
+
+#labelPills::-webkit-scrollbar-track,
+#archiveList::-webkit-scrollbar-track{
+    background:var(--rule);
+    border-radius:4px;
+}
+
+#labelPills::-webkit-scrollbar-thumb,
+#archiveList::-webkit-scrollbar-thumb{
+    background:var(--text);
+    border-radius:4px;
+}
+
+#labelPills::-webkit-scrollbar-thumb:hover,
+#archiveList::-webkit-scrollbar-thumb:hover{
+    background:#ffffff;
 }
 
 .label-pill{
@@ -282,40 +304,9 @@ body{
     transition:color .15s ease;
 }
 
-.label-pill.extra{
-    display:none;
-}
-
-.label-pill.extra.show{
-    display:block;
-}
-
 .label-pill:hover,
 .label-pill.active{
     color:var(--accent);
-}
-
-.show-more-btn{
-    display:block;
-    background:none;
-    border:1px solid var(--rule);
-    color:var(--accent);
-    font-family:'IBM Plex Mono',monospace;
-    font-size:11.5px;
-    letter-spacing:.04em;
-    text-transform:uppercase;
-    padding:6px 14px;
-    border-radius:999px;
-    cursor:pointer;
-    margin-top:6px;
-}
-
-.show-more-btn:hover{
-    border-color:var(--accent);
-}
-
-.show-more-btn.hidden{
-    display:none;
 }
 
 
@@ -601,10 +592,9 @@ Thoughts on AI, software, real estate, and whatever else comes to mind.
 <nav class="sidebar" id="sidebar">
 
     <div class="search-widget">
-        <p class="search-label">Search This Blog</p>
         <div class="search-row">
-            <input type="text" id="searchInput" placeholder="" autocomplete="off">
-            <button class="search-submit" id="searchSubmit">Search</button>
+            <input type="text" id="searchInput" class="search-inline-input" placeholder="Type to search…" autocomplete="off">
+            <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </div>
     </div>
 
@@ -620,7 +610,6 @@ Thoughts on AI, software, real estate, and whatever else comes to mind.
             <div class="menu-section-body">
                 <div class="menu-section-body-inner">
                     <div id="labelPills"></div>
-                    <button class="show-more-btn" id="showMoreLabels">Show more</button>
                 </div>
             </div>
         </div>
@@ -632,11 +621,7 @@ Thoughts on AI, software, real estate, and whatever else comes to mind.
             </button>
             <div class="menu-section-body">
                 <div class="menu-section-body-inner">
-                    <ul>
-                        <li><a href="#">July 2026</a></li>
-                        <li><a href="#">June 2026</a></li>
-                        <li><a href="#">May 2026</a></li>
-                    </ul>
+                    <ul id="archiveList"></ul>
                 </div>
             </div>
         </div>
@@ -651,7 +636,6 @@ Thoughts on AI, software, real estate, and whatever else comes to mind.
 <script>
 
 const searchInput = document.getElementById('searchInput');
-const searchSubmit = document.getElementById('searchSubmit');
 
 const posts = Array.from(document.querySelectorAll('.post'));
 const noResults = document.getElementById('noResults');
@@ -662,12 +646,7 @@ const POSTS_PER_PAGE = 10;
 let currentPage = 1;
 
 let activeLabel = null;
-
-// --- Search submit (Blogger-style "SEARCH" label) ---
-searchSubmit.addEventListener('click', () => {
-    filterPosts();
-    searchInput.focus();
-});
+let activeMonth = null;
 
 // --- Collapsible sections (Archive / Labels) ---
 document.querySelectorAll('.menu-section-header').forEach(header => {
@@ -677,7 +656,6 @@ document.querySelectorAll('.menu-section-header').forEach(header => {
 });
 
 // --- Build label list from data-labels on the page ---
-const LABEL_PREVIEW_COUNT = 8;
 const allLabels = new Set();
 posts.forEach(post => {
     const labels = (post.dataset.labels || '').split(',').map(l => l.trim()).filter(Boolean);
@@ -685,12 +663,10 @@ posts.forEach(post => {
 });
 
 const sortedLabels = Array.from(allLabels).sort();
-const showMoreBtn = document.getElementById('showMoreLabels');
 
-sortedLabels.forEach((label, i) => {
+sortedLabels.forEach(label => {
     const pill = document.createElement('div');
     pill.className = 'label-pill';
-    if (i >= LABEL_PREVIEW_COUNT) pill.classList.add('extra');
     pill.textContent = label;
     pill.addEventListener('click', () => {
         if (activeLabel === label) {
@@ -706,14 +682,46 @@ sortedLabels.forEach((label, i) => {
     labelPillsContainer.appendChild(pill);
 });
 
-if (sortedLabels.length <= LABEL_PREVIEW_COUNT) {
-    showMoreBtn.classList.add('hidden');
-} else {
-    showMoreBtn.addEventListener('click', () => {
-        document.querySelectorAll('.label-pill.extra').forEach(p => p.classList.add('show'));
-        showMoreBtn.classList.add('hidden');
-    });
+// --- Build archive list from each post's date, newest first ---
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function getPostMonthKey(post){
+    const dateText = post.querySelector('.date').textContent.trim();
+    return dateText.slice(0, 7); // 'YYYY-MM'
 }
+
+const archiveMap = new Map(); // 'YYYY-MM' -> label text
+posts.forEach(post => {
+    const key = getPostMonthKey(post);
+    if (!archiveMap.has(key)) {
+        const [year, month] = key.split('-');
+        archiveMap.set(key, `${MONTH_NAMES[parseInt(month, 10) - 1]} ${year}`);
+    }
+});
+
+const archiveList = document.getElementById('archiveList');
+const sortedMonthKeys = Array.from(archiveMap.keys()).sort().reverse();
+
+sortedMonthKeys.forEach(key => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = '#';
+    a.textContent = archiveMap.get(key);
+    a.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (activeMonth === key) {
+            activeMonth = null;
+            a.classList.remove('active');
+        } else {
+            document.querySelectorAll('#archiveList a').forEach(link => link.classList.remove('active'));
+            activeMonth = key;
+            a.classList.add('active');
+        }
+        filterPosts();
+    });
+    li.appendChild(a);
+    archiveList.appendChild(li);
+});
 
 // --- Filtering + pagination logic ---
 function filterPosts(resetPage = true){
@@ -725,8 +733,9 @@ function filterPosts(resetPage = true){
 
         const matchesQuery = !query || title.includes(query) || labels.includes(query);
         const matchesLabel = !activeLabel || labels.split(',').map(l => l.trim()).includes(activeLabel);
+        const matchesMonth = !activeMonth || getPostMonthKey(post) === activeMonth;
 
-        return matchesQuery && matchesLabel;
+        return matchesQuery && matchesLabel && matchesMonth;
     });
 
     if (resetPage) currentPage = 1;
