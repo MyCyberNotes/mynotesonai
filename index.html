@@ -18,7 +18,6 @@
     --muted:#8f9499;
     --accent:#67b7a8;
     --rule:#2b2d31;
-    --sidebar-width:240px;
 }
 
 *{
@@ -32,243 +31,162 @@ body{
     font-family:'Source Serif 4',serif;
     font-size:19px;
     line-height:1.7;
-    overflow-x:hidden;
 }
 
-.page-layout{
+
+/* HEADER — centered title + tagline */
+
+.site-header{
+    text-align:center;
+    padding:50px 25px 30px 25px;
+}
+
+.site-header h1{
+    margin:0;
+    font-size:40px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+}
+
+.tagline{
+    color:var(--muted);
+    margin:10px 0 0 0;
+}
+
+
+/* TOOLBAR — hamburger (categories) + search bar + search button */
+
+.toolbar{
     max-width:1000px;
-    margin:0 auto;
-    display:flex;
-    align-items:flex-start;
-    gap:50px;
+    margin:0 auto 40px auto;
     padding:0 25px;
-}
-
-.main-col{
-    flex:1;
-    min-width:0;
-}
-
-
-/* TOP BAR — hamburger left, inline search on right */
-
-/* SEARCH WIDGET — lives in the sidebar now, always visible */
-
-.search-widget{
-    margin-bottom:25px;
-}
-
-.search-row{
     display:flex;
     align-items:center;
-    gap:8px;
-    border-bottom:1px solid var(--rule);
-    padding-bottom:6px;
+    gap:10px;
 }
 
-.search-row:focus-within{
+.toolbar-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:42px;
+    height:42px;
+    background:#22252a;
+    border:1px solid var(--rule);
+    border-radius:8px;
+    color:var(--muted);
+    cursor:pointer;
+    flex:0 0 auto;
+    text-decoration:none;
+    transition:color .15s ease, border-color .15s ease;
+}
+
+.toolbar-btn:hover{
+    color:var(--accent);
     border-color:var(--accent);
 }
 
-.search-icon{
-    width:16px;
-    height:16px;
-    stroke:var(--muted);
+.toolbar-btn svg{
+    width:18px;
+    height:18px;
+    stroke:currentColor;
     fill:none;
     stroke-width:1.8;
     stroke-linecap:round;
     stroke-linejoin:round;
-    flex:0 0 auto;
 }
 
-.search-inline-input{
-    display:block;
-    width:100%;
+.toolbar-search{
     flex:1;
     min-width:0;
-    background:none;
-    border:none;
-    outline:none;
+    background:#1c1f23;
+    border:1px solid var(--rule);
+    border-radius:8px;
+    padding:11px 14px;
     color:var(--text);
     font-family:'IBM Plex Mono',monospace;
-    font-size:16px;
-    padding:2px 0;
+    font-size:15px;
+    outline:none;
+    transition:border-color .15s ease;
 }
 
-.search-inline-input:focus{
+.toolbar-search:focus{
     border-color:var(--accent);
 }
 
-.search-inline-input::placeholder{
+.toolbar-search::placeholder{
     color:var(--muted);
 }
 
 .no-results{
+    max-width:1000px;
+    margin:0 auto;
+    padding:0 25px;
     color:var(--muted);
     font-family:'IBM Plex Mono',monospace;
     font-size:14px;
-    padding:10px 0 0 0;
     display:none;
 }
 
 .no-results.show{
     display:block;
+    margin-bottom:20px;
 }
 
 
-/* SIDEBAR — fixed, always visible, only the posts column scrolls */
+/* THREE-COLUMN LAYOUT — Labels | Posts | Archive */
 
-/* SIDEBAR — a natural column that sticks in view while you scroll,
-   no separate panel background, just a thin divider like the rest of the page */
+.three-col{
+    max-width:1000px;
+    margin:0 auto;
+    padding:0 25px 60px 25px;
+    display:grid;
+    grid-template-columns:150px 1fr 150px;
+    gap:40px;
+    align-items:start;
+}
 
-.sidebar{
-    position:sticky;
-    top:30px;
-    align-self:flex-start;
-    flex:0 0 var(--sidebar-width);
-    width:var(--sidebar-width);
-    background:none;
-    margin-left:-10px;
+.col-heading{
+    font-family:'Source Serif 4',serif;
+    font-size:17px;
+    font-weight:600;
+    margin:0 0 14px 0;
+    color:var(--text);
+}
+
+.col-labels{
+    border-right:1px solid var(--rule);
+    padding-right:40px;
+}
+
+.col-archive{
     border-left:1px solid var(--rule);
     padding-left:40px;
 }
 
-.home-link{
-    display:block;
-    color:var(--text);
-    text-decoration:none;
-    font-family:'Source Serif 4',serif;
-    font-size:17px;
-    font-weight:600;
-    margin-bottom:25px;
-    padding-bottom:18px;
-    border-bottom:1px solid var(--rule);
-}
 
-.home-link:hover{
-    color:var(--accent);
-}
-
-.sidebar-columns{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px;
-    padding:18px 0;
-}
-
-.sidebar-columns .menu-section{
-    border-top:none;
-    padding:0;
-}
-
-.sidebar-columns .menu-section-header{
-    font-size:14px;
-}
-
-.sidebar-columns .menu-section-header svg{
-    width:12px;
-    height:12px;
-}
-
-.sidebar-columns .label-pill{
-    font-size:13px;
-    white-space:normal;
-}
-
-.sidebar-columns li{
-    margin-bottom:8px;
-}
-
-.sidebar-columns li a{
-    font-size:13px;
-}
-
-.menu-section-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    cursor:pointer;
-    background:none;
-    border:none;
-    width:100%;
-    padding:0;
-    color:var(--text);
-    font-family:'Source Serif 4',serif;
-    font-size:17px;
-    font-weight:600;
-}
-
-.menu-section-header svg{
-    width:16px;
-    height:16px;
-    stroke:var(--muted);
-    fill:none;
-    stroke-width:2;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-    transition:transform .2s ease;
-    flex-shrink:0;
-}
-
-.menu-section.open .menu-section-header svg{
-    transform:rotate(180deg);
-}
-
-.menu-section-body{
-    max-height:0;
-    overflow:hidden;
-    transition:max-height .25s ease;
-}
-
-.menu-section.open .menu-section-body{
-    max-height:600px;
-}
-
-.menu-section-body-inner{
-    padding-top:16px;
-}
-
-.sidebar ul{
-    list-style:none;
-    padding:0;
-    margin:0;
-}
-
-.sidebar li{
-    margin-bottom:12px;
-}
-
-.sidebar a{
-    color:var(--muted);
-    text-decoration:none;
-    font-size:16px;
-}
-
-.sidebar a:hover{
-    color:var(--accent);
-}
-
-#archiveList a.active{
-    color:var(--accent);
-    font-weight:600;
-}
+/* LABELS / ARCHIVE lists — scrollable once they grow */
 
 #labelPills,
 #archiveList{
     display:grid;
     grid-template-columns:1fr;
     gap:0;
-    max-height:140px;
+    max-height:300px;
     overflow-y:auto;
     -webkit-overflow-scrolling:touch;
     padding-right:10px;
+    list-style:none;
+    margin:0;
+    padding-left:0;
     scrollbar-width:thin;
     scrollbar-color:var(--text) var(--rule);
 }
 
 #labelPills::-webkit-scrollbar,
 #archiveList::-webkit-scrollbar{
-    width:20px;
+    width:10px;
 }
 
 #labelPills::-webkit-scrollbar-track,
@@ -293,8 +211,8 @@ body{
     background:none;
     color:var(--muted);
     font-family:'Source Serif 4',serif;
-    font-size:15px;
-    padding:2px 0;
+    font-size:17px;
+    padding:3px 0;
     margin:0;
     cursor:pointer;
     border:none;
@@ -309,34 +227,31 @@ body{
     color:var(--accent);
 }
 
-
-/* MAIN PAGE LAYOUT */
-
-.wrapper{
-    padding:40px 0 60px 0;
+#archiveList li{
+    margin-bottom:8px;
 }
 
-
-/* HEADER */
-
-h1{
-    margin:0;
-    font-size:42px;
-    font-weight:600;
-}
-
-.tagline{
+#archiveList a{
     color:var(--muted);
-    margin-top:8px;
-    margin-bottom:60px;
+    text-decoration:none;
+    font-size:17px;
+    transition:color .15s ease;
+}
+
+#archiveList a:hover{
+    color:var(--accent);
+}
+
+#archiveList a.active{
+    color:var(--accent);
+    font-weight:600;
 }
 
 
 /* POSTS */
 
 .posts{
-    margin-top:10px;
-    max-width:720px;
+    margin-top:0;
 }
 
 .post{
@@ -461,9 +376,36 @@ footer{
 }
 
 
-/* MOBILE */
+/* MOBILE — stack columns, borders move to horizontal dividers */
 
-@media(max-width:600px){
+@media(max-width:700px){
+
+.three-col{
+    grid-template-columns:1fr;
+    gap:0;
+}
+
+.col-labels{
+    border-right:none;
+    border-bottom:1px solid var(--rule);
+    padding-right:0;
+    padding-bottom:25px;
+    margin-bottom:25px;
+    order:2;
+}
+
+.col-posts{
+    order:1;
+}
+
+.col-archive{
+    border-left:none;
+    border-top:1px solid var(--rule);
+    padding-left:0;
+    padding-top:25px;
+    margin-top:25px;
+    order:3;
+}
 
 .post{
     grid-template-columns:1fr;
@@ -472,23 +414,6 @@ footer{
 
 .title a{
     font-size:16px;
-}
-
-.page-layout{
-    flex-direction:column;
-    gap:0;
-}
-
-.sidebar{
-    position:static;
-    width:100%;
-    flex:none;
-    margin-left:0;
-    border-left:none;
-    border-top:1px solid var(--rule);
-    padding-left:0;
-    padding-top:25px;
-    margin-top:20px;
 }
 
 }
@@ -500,135 +425,101 @@ footer{
 
 <body>
 
+<div class="site-header">
+    <h1>Notes</h1>
+    <p class="tagline">Thoughts on AI, software, real estate, and whatever else comes to mind.</p>
+</div>
 
-<div class="page-layout">
-
-<div class="main-col">
-
-<div class="wrapper">
-
-<main>
-
-<h1>Notes</h1>
-
-<p class="tagline">
-Thoughts on Tech, Real Estate and Life Stuff.
-</p>
+<div class="toolbar">
+    <a href="categories.html" class="toolbar-btn" aria-label="Browse categories">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </a>
+    <input type="text" id="searchInput" class="toolbar-search" placeholder="Type to search…" autocomplete="off">
+    <button class="toolbar-btn" id="searchBtn" aria-label="Search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    </button>
+</div>
 
 <p class="no-results" id="noResults">No posts match your search.</p>
 
-<div class="posts" id="postsList">
+<div class="three-col">
 
-<div class="post" data-labels="openbsd, bsd, tutorials">
-<div class="date">2026-07-30</div>
-<div class="title"><a href="posts/post11.html">What To Do After Installing OpenBSD</a></div>
-</div>
+    <nav class="col-labels">
+        <h2 class="col-heading">Labels</h2>
+        <div id="labelPills"></div>
+    </nav>
 
-<div class="post" data-labels="writing, personal">
-<div class="date">2026-07-15</div>
-<div class="title"><a href="posts/post1.html">Why I Started Writing Everything Down</a></div>
-</div>
+    <main class="col-posts">
 
-<div class="post" data-labels="ai, self-hosting, tutorials">
-<div class="date">2026-07-12</div>
-<div class="title"><a href="posts/post2.html">Building a Local AI Assistant</a></div>
-</div>
+        <div class="posts" id="postsList">
 
-<div class="post" data-labels="ai, ollama">
-<div class="date">2026-07-09</div>
-<div class="title"><a href="posts/post3.html">My First Experience with Ollama</a></div>
-</div>
-
-<div class="post" data-labels="ai, concepts">
-<div class="date">2026-07-04</div>
-<div class="title"><a href="posts/post4.html">Understanding Embeddings</a></div>
-</div>
-
-<div class="post" data-labels="python, productivity">
-<div class="date">2026-06-28</div>
-<div class="title"><a href="posts/post5.html">Using Python for Small Daily Tasks</a></div>
-</div>
-
-<div class="post" data-labels="ai, prompting">
-<div class="date">2026-06-20</div>
-<div class="title"><a href="posts/post6.html">Things I Learned About Prompting</a></div>
-</div>
-
-<div class="post" data-labels="productivity, notes">
-<div class="date">2026-06-11</div>
-<div class="title"><a href="posts/post7.html">Organizing Notes That I Can Actually Find</a></div>
-</div>
-
-<div class="post" data-labels="sql, tutorials">
-<div class="date">2026-06-03</div>
-<div class="title"><a href="posts/post8.html">Learning SQL One Query at a Time</a></div>
-</div>
-
-<div class="post" data-labels="programming, personal">
-<div class="date">2026-05-26</div>
-<div class="title"><a href="posts/post9.html">Building Better Habits as a Programmer</a></div>
-</div>
-
-<div class="post" data-labels="meta">
-<div class="date">2026-05-10</div>
-<div class="title"><a href="posts/post10.html">Hello, World.</a></div>
-</div>
-
-</div>
-
-<div class="pagination" id="pagination"></div>
-
-<footer>
-© 2026 • Notes
-</footer>
-
-</main>
-
-</div>
-
-</div>
-
-
-<nav class="sidebar" id="sidebar">
-
-    <div class="search-widget">
-        <div class="search-row">
-            <input type="text" id="searchInput" class="search-inline-input" placeholder="Type to search…" autocomplete="off">
-            <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </div>
-    </div>
-
-    <a href="index.html" class="home-link">Home</a>
-
-    <div class="sidebar-columns">
-
-        <div class="menu-section open" id="labelsSection">
-            <button class="menu-section-header">
-                Labels
-                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="menu-section-body">
-                <div class="menu-section-body-inner">
-                    <div id="labelPills"></div>
-                </div>
+            <div class="post" data-labels="openbsd, bsd, tutorials">
+                <div class="date">2026-07-30</div>
+                <div class="title"><a href="posts/post11.html">What To Do After Installing OpenBSD</a></div>
             </div>
-        </div>
 
-        <div class="menu-section open" id="archiveSection">
-            <button class="menu-section-header">
-                Archive
-                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="menu-section-body">
-                <div class="menu-section-body-inner">
-                    <ul id="archiveList"></ul>
-                </div>
+            <div class="post" data-labels="writing, personal">
+                <div class="date">2026-07-15</div>
+                <div class="title"><a href="posts/post1.html">Why I Started Writing Everything Down</a></div>
             </div>
+
+            <div class="post" data-labels="ai, self-hosting, tutorials">
+                <div class="date">2026-07-12</div>
+                <div class="title"><a href="posts/post2.html">Building a Local AI Assistant</a></div>
+            </div>
+
+            <div class="post" data-labels="ai, ollama">
+                <div class="date">2026-07-09</div>
+                <div class="title"><a href="posts/post3.html">My First Experience with Ollama</a></div>
+            </div>
+
+            <div class="post" data-labels="ai, concepts">
+                <div class="date">2026-07-04</div>
+                <div class="title"><a href="posts/post4.html">Understanding Embeddings</a></div>
+            </div>
+
+            <div class="post" data-labels="python, productivity">
+                <div class="date">2026-06-28</div>
+                <div class="title"><a href="posts/post5.html">Using Python for Small Daily Tasks</a></div>
+            </div>
+
+            <div class="post" data-labels="ai, prompting">
+                <div class="date">2026-06-20</div>
+                <div class="title"><a href="posts/post6.html">Things I Learned About Prompting</a></div>
+            </div>
+
+            <div class="post" data-labels="productivity, notes">
+                <div class="date">2026-06-11</div>
+                <div class="title"><a href="posts/post7.html">Organizing Notes That I Can Actually Find</a></div>
+            </div>
+
+            <div class="post" data-labels="sql, tutorials">
+                <div class="date">2026-06-03</div>
+                <div class="title"><a href="posts/post8.html">Learning SQL One Query at a Time</a></div>
+            </div>
+
+            <div class="post" data-labels="programming, personal">
+                <div class="date">2026-05-26</div>
+                <div class="title"><a href="posts/post9.html">Building Better Habits as a Programmer</a></div>
+            </div>
+
+            <div class="post" data-labels="meta">
+                <div class="date">2026-05-10</div>
+                <div class="title"><a href="posts/post10.html">Hello, World.</a></div>
+            </div>
+
         </div>
 
-    </div>
+        <div class="pagination" id="pagination"></div>
 
-</nav>
+        <footer>© 2026 • Notes</footer>
+
+    </main>
+
+    <nav class="col-archive">
+        <h2 class="col-heading">Archive</h2>
+        <ul id="archiveList"></ul>
+    </nav>
 
 </div>
 
@@ -636,6 +527,7 @@ Thoughts on Tech, Real Estate and Life Stuff.
 <script>
 
 const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
 
 const posts = Array.from(document.querySelectorAll('.post'));
 const noResults = document.getElementById('noResults');
@@ -648,12 +540,8 @@ let currentPage = 1;
 let activeLabel = null;
 let activeMonth = null;
 
-// --- Collapsible sections (Archive / Labels) ---
-document.querySelectorAll('.menu-section-header').forEach(header => {
-    header.addEventListener('click', () => {
-        header.closest('.menu-section').classList.toggle('open');
-    });
-});
+// --- Search button just focuses the (already live-filtering) input ---
+searchBtn.addEventListener('click', () => searchInput.focus());
 
 // --- Build label list from data-labels on the page ---
 const allLabels = new Set();
@@ -790,26 +678,6 @@ searchInput.addEventListener('input', () => filterPosts(true));
 
 // --- Initial paginated render ---
 filterPosts();
-
-// --- Align sidebar top with the first post's date, not the page title ---
-function alignSidebar(){
-    const sidebar = document.getElementById('sidebar');
-    const firstDate = document.querySelector('.post .date');
-    if (!sidebar || !firstDate) return;
-
-    const EXTRA_OFFSET = 30;
-    sidebar.style.marginTop = '0px';
-    const delta = firstDate.getBoundingClientRect().top - sidebar.getBoundingClientRect().top;
-    sidebar.style.marginTop = Math.max(0, delta + EXTRA_OFFSET) + 'px';
-}
-
-if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(alignSidebar);
-} else {
-    window.addEventListener('load', alignSidebar);
-}
-window.addEventListener('resize', alignSidebar);
-
 
 </script>
 
